@@ -32,10 +32,11 @@ public class Training extends Thread
 	public static void main(String[] args) throws InterruptedException 
 	{
 		Training[] mytn = new Training[1000];
+		Semaphore mutex = new Semaphore(1);
 		
 		for(int i=0; i < mytn.length; i++)
 		{
-			mytn[i] = new Training(i);
+			mytn[i] = new Training(mutex);
 			mytn[i].start();
 		}
 		for(int i=0; i < mytn.length; i++)
