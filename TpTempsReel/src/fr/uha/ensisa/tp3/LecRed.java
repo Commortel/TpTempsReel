@@ -5,7 +5,7 @@ import java.util.concurrent.Semaphore;
 
 public class LecRed
 {
-	public static void main(String[] args)
+	private static void firstStrategy()
 	{
 		Semaphore MReading = new Semaphore(1);
 		Semaphore MWriting = new Semaphore(1);
@@ -18,5 +18,26 @@ public class LecRed
 			else
 				new Redacteur(MWriting).run();
 		}
+	}
+	
+	private static void secondStrategy()
+	{
+		Semaphore MReading = new Semaphore(1);
+		Semaphore MWriting = new Semaphore(1);
+		Random r = new Random();
+		
+		while(true) 
+		{
+			if(r.nextDouble() > 0.5)
+				new Lecteur(MReading,MWriting).run();
+			else
+				new Redacteur2(MWriting).run();
+		}
+	}
+	
+	public static void main(String[] args)
+	{
+		//firstStrategy();
+		secondStrategy();
 	}
 }
