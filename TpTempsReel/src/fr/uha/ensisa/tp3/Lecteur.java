@@ -6,13 +6,13 @@ public class Lecteur implements Runnable
 {
 	private Semaphore MReading;
 	private Semaphore MWriting;
-	private int counter = 0;
+	public int counter;
 	
-	public Lecteur(Semaphore MReading, Semaphore MWriting)
+	public Lecteur(Semaphore MReading, Semaphore MWriting, int counter)
 	{
 		this.MReading = MReading;
 		this.MWriting = MWriting;
-		this.counter = 0;
+		this.counter = counter;
 	}
 	
 	public void run() 
@@ -26,7 +26,7 @@ public class Lecteur implements Runnable
 			this.MReading.release();	
 			
 			System.out.println("Lecture");
-			Thread.sleep(100);
+			Thread.sleep(1000);
 			
 			this.MReading.acquire();
 			this.counter--;
@@ -38,7 +38,6 @@ public class Lecteur implements Runnable
 		{
 			e.printStackTrace();
 		}
-		
 	}
 
 }

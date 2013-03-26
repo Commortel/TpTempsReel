@@ -5,26 +5,26 @@ import java.util.concurrent.Semaphore;
 public class Redacteur2 implements Runnable
 {
 	private Semaphore MWriting;
-	private Semaphore MAlone;
+	private Semaphore MPrio;
 	
-	public Redacteur2(Semaphore MWriting)
+	public Redacteur2(Semaphore MWriting, Semaphore MPrio)
 	{
 		this.MWriting = MWriting;
-		this.MAlone = new Semaphore(1);
+		this.MPrio = MPrio;
 	}
 	
 	public void run() 
 	{
 		try
 		{
-			this.MAlone.acquire();
+			this.MPrio.acquire();
 			this.MWriting.acquire();
 			
 			System.out.println("Ecriture");
 			Thread.sleep(1000);
 			
 			this.MWriting.release();
-			this.MAlone.release();
+			this.MPrio.release();
 		}
 		catch (InterruptedException e) 
 		{

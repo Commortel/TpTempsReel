@@ -9,14 +9,20 @@ public class LecRed
 	{
 		Semaphore MReading = new Semaphore(1);
 		Semaphore MWriting = new Semaphore(1);
+		int counter = 0;
 		Random r = new Random();
 		
 		while(true) 
 		{
 			if(r.nextDouble() > 0.5)
-				new Lecteur(MReading,MWriting).run();
+			{
+				Lecteur l = new Lecteur(MReading,MWriting,counter);
+				l.run();
+				counter = l.counter;
+			}
 			else
 				new Redacteur(MWriting).run();
+			System.out.println("----->Counter : " + counter);
 		}
 	}
 	
@@ -24,20 +30,60 @@ public class LecRed
 	{
 		Semaphore MReading = new Semaphore(1);
 		Semaphore MWriting = new Semaphore(1);
+		Semaphore MPrio = new Semaphore(1);
+		int counter = 0;
 		Random r = new Random();
 		
 		while(true) 
 		{
 			if(r.nextDouble() > 0.5)
-				new Lecteur(MReading,MWriting).run();
+				new Lecteur(MReading,MWriting, counter).run();
 			else
-				new Redacteur2(MWriting).run();
+				new Redacteur2(MWriting,MPrio).run();
+		}
+	}
+	
+	private static void thirdStrategy()
+	{
+		Semaphore MReading = new Semaphore(1);
+		Semaphore MWriting = new Semaphore(1);
+		Semaphore MPrio = new Semaphore(1);
+		Random r = new Random();
+		
+		while(true) 
+		{
+			if(r.nextDouble() > 0.5)
+				new Lecteur2(MReading,MWriting,MPrio).run();
+			else
+				new Redacteur2(MWriting,MPrio).run();
+		}
+	}
+	
+	private static void fourthStrategy()
+	{
+		Semaphore MReading = new Semaphore(1);
+		Semaphore MWriting = new Semaphore(1);
+		Semaphore MPrio = new Semaphore(1);
+		Semaphore MPrioW = new Semaphore(1);
+		Semaphore MPrioR = new Semaphore(1);
+		int RCounter = 0;
+		int WCounter = 0;
+		Random r = new Random();
+		
+		while(true) 
+		{
+			if(r.nextDouble() > 0.5)
+				new Lecteur3(MReading,MWriting,MPrio,MPrioR, RCounter).run();
+			else
+				new Redacteur3(MWriting,MReading, MPrioW, WCounter).run();
 		}
 	}
 	
 	public static void main(String[] args)
 	{
 		//firstStrategy();
-		secondStrategy();
+		//secondStrategy();
+		//thirdStrategy();
+		fourthStrategy();
 	}
 }
