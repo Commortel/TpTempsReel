@@ -1,21 +1,32 @@
 package fr.uha.ensisa.tp3;
 
+import java.util.concurrent.Semaphore;
+
 public class Training extends Thread
 {
-    private int m_id;
+    private Semaphore m_mutex;
 	public static int counter = 0;
 	
-	public Training(int id)
+	public Training(Semaphore mutex)
 	{
-		this.m_id = id;
+		this.m_mutex = mutex;
 	}
 	
-	public synchronized void run()
+	public void run()
 	{
-		int tmp = counter;
-		tmp = tmp + 1;
-		int tmp2 = tmp;
-		counter = tmp2;
+		try 
+		{
+			this.m_mutex.acquire();
+			int tmp = counter;
+			tmp = tmp + 1;
+			int tmp2 = tmp;
+			counter = tmp2;
+			this.m_mutex.release();
+		} 
+		catch (InterruptedException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public static void main(String[] args) throws InterruptedException 
