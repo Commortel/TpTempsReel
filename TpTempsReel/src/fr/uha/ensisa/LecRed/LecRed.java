@@ -63,9 +63,6 @@ public class LecRed
 	{
 		Semaphore MReading = new Semaphore(1);
 		Semaphore MWriting = new Semaphore(1);
-		Semaphore MPrio = new Semaphore(1);
-		Semaphore MPrioW = new Semaphore(1);
-		Semaphore MPrioR = new Semaphore(1);
 		int RCounter = 0;
 		int WCounter = 0;
 		Random r = new Random();
@@ -73,9 +70,9 @@ public class LecRed
 		while(true) 
 		{
 			if(r.nextDouble() > 0.5)
-				new Lecteur3(MReading,MWriting,MPrio,MPrioR, RCounter).run();
+				new Lecteur3(MReading,MWriting, RCounter).run();
 			else
-				new Redacteur3(MWriting,MReading, MPrioW, WCounter).run();
+				new Redacteur3(MWriting,MReading, WCounter).run();
 		}
 	}
 	

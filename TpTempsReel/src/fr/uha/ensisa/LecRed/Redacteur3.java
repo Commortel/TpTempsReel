@@ -6,14 +6,14 @@ public class Redacteur3 implements Runnable
 {
 	private Semaphore MWriting;
 	private Semaphore MReading;
-	private Semaphore MPrio;
+	private Semaphore MPrioW;
 	private int counter;
 	
-	public Redacteur3(Semaphore mWriting, Semaphore mReading, Semaphore mPrio, int wCounter) 
+	public Redacteur3(Semaphore mWriting, Semaphore mReading, int wCounter) 
 	{
 		this.MWriting = mWriting;
 		this.MReading = mReading;
-		this.MPrio = mPrio;
+		this.MPrioW = new Semaphore(1);
 		this.counter = wCounter;
 	}
 
@@ -21,22 +21,22 @@ public class Redacteur3 implements Runnable
 	{
 		try
 		{
-			this.MPrio.acquire();
+			this.MPrioW.acquire();
 				if(this.counter == 0)
 					this.MReading.acquire();
 				this.counter++;
-			this.MPrio.release();	
-				this.MWriting.acquire();
+			this.MPrioW.release();	
+			this.MWriting.acquire();
 				
-				System.out.println("Ecriture");
-				Thread.sleep(1000);
+			System.out.println("Ecriture");
+			Thread.sleep(1000);
 
-				this.MWriting.release();
-			this.MPrio.acquire();		
-				this.counter++;
+			this.MWriting.release();
+			this.MPrioW.acquire();		
+				this.counter--;
 				if(this.counter == 0)
 					this.MReading.release();
-			this.MPrio.release();
+			this.MPrioW.release();
 		}
 		catch (InterruptedException e) 
 		{
